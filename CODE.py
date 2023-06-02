@@ -5,6 +5,8 @@ import math
 app = Flask("__name__")
 
 q = ""
+
+
 @app.route("/")
 def loadPage():
     return render_template('index.html', query="")
@@ -15,26 +17,29 @@ def cosineSimilarity():
     try:
         universalSetOfUniqueWords = []
         matchPercentage = 0
+
+        
+
         inputQuery = request.form['query']
         lowercaseQuery = inputQuery.lower()
 
-        queryWordList = re.sub("[^\w]", " ", lowercaseQuery).split()  # Replace punctuation by space and split
-        # queryWordList = map(str, queryWordList)                   #This was causing divide by zero error
-
+        queryWordList = re.sub("[^\w]", " ", lowercaseQuery).split()  
         for word in queryWordList:
             if word not in universalSetOfUniqueWords:
                 universalSetOfUniqueWords.append(word)
+
+        
+
         fd = open("database1.txt", "r")
         database1 = fd.read().lower()
 
-        databaseWordList = re.sub("[^\w]", " ", database1).split()  # Replace punctuation by space and split
-        # databaseWordList = map(str, databaseWordList)         #And this also leads to divide by zero error
+        databaseWordList = re.sub("[^\w]", " ", database1).split()  
 
         for word in databaseWordList:
             if word not in universalSetOfUniqueWords:
                 universalSetOfUniqueWords.append(word)
 
-        
+       
 
         queryTF = []
         databaseTF = []
@@ -69,6 +74,16 @@ def cosineSimilarity():
 
         matchPercentage = (float)(dotProduct / (queryVectorMagnitude * databaseVectorMagnitude)) * 100
 
+        '''
+        print queryWordList
+        print
+        print databaseWordList
+
+
+        print queryTF
+        print
+        print databaseTF
+        '''
 
         output = "Input query is %0.02f%% paraphrased." % matchPercentage
 
@@ -79,4 +94,5 @@ def cosineSimilarity():
 
 
 app.run()
+
 
