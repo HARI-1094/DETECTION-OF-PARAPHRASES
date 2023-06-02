@@ -1,0 +1,6 @@
+FLASK INSTALLATION
+cd path
+py -3 -m venv .venv
+.venv\Scripts\activate
+pip install flask
+python filename.py
